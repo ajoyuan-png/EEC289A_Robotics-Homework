@@ -102,7 +102,7 @@ def default_config() -> config_dict.ConfigDict:
             # Probability that each command channel stays active, weighted more fo x so that it focuses on moving forward?
             b=[0.9, 0.25, 0.5],
             # Stage metadata is injected from configs/course_config.json.
-            stage_name="stage_1",
+            stage_name="stage_1", #command_config stage name is listed here, problem is where is the stage_2? It's not here?
             student_stage2_goal_min=[-1.0, -0.4, -1.0],
             student_stage2_goal_max=[1.0, 0.4, 1.0],
             student_stage2_goal_b=[0.9, 0.25, 0.5],
@@ -184,7 +184,7 @@ class Joystick(go2_base.Go2Env):
         self._cmd_min = jp.array(self._config.command_config.min)
         self._cmd_max = jp.array(self._config.command_config.max)
         self._cmd_b = jp.array(self._config.command_config.b)
-        self._command_stage_name = str(self._config.command_config.stage_name)
+        self._command_stage_name = str(self._config.command_config.stage_name) 
         self._student_stage2_goal_min = jp.array(self._config.command_config.student_stage2_goal_min)
         self._student_stage2_goal_max = jp.array(self._config.command_config.student_stage2_goal_max)
         self._student_stage2_goal_b = jp.array(self._config.command_config.student_stage2_goal_b)
@@ -545,8 +545,8 @@ class Joystick(go2_base.Go2Env):
         )
 
     def _command_sampling_profile(self, current_command: jax.Array) -> tuple[jax.Array, jax.Array, jax.Array]:
-        if self._command_stage_name == "stage_2":
-            return self._student_stage2_sampling_profile(current_command)
+        if self._command_stage_name == "stage_2": #I check to see if command_stage_name is stage 2 here?
+            return self._student_stage2_sampling_profile(current_command) 
         return self._cmd_min, self._cmd_max, self._cmd_b
 
     def _student_stage2_sampling_profile(self, current_command: jax.Array) -> tuple[jax.Array, jax.Array, jax.Array]:
@@ -565,8 +565,14 @@ class Joystick(go2_base.Go2Env):
         2. widen the stage_2 sampling range toward `self._student_stage2_goal_*`
         3. increase the probability of non-zero `vy` and `yaw_rate` commands
         """
-        del current_command
-        return self._cmd_min, self._cmd_max, self._cmd_b
+        #del current_command
+        
+        #return self._cmd_min, self._cmd_max, self._cmd_b
+        return (
+        self._student_stage2_goal_min, 
+        self._student_stage2_goal_max, 
+        self._student_stage2_goal_b
+        )
 
     def sample_command(self, rng: jax.Array, current_command: jax.Array) -> jax.Array:
         rng, y_rng, w_rng, z_rng = jax.random.split(rng, 4)
