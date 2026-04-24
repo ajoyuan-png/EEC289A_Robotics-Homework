@@ -24,7 +24,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
 
-import jax
+import jax #JAX designed specifically for machine learning and high-performance physics
 import jax.numpy as jp
 from ml_collections import config_dict
 from mujoco import mjx
@@ -99,7 +99,7 @@ def default_config() -> config_dict.ConfigDict:
             # Command sampling ranges for [vx, vy, yaw_rate]
             min=[-1.0, -0.4, -1.0],
             max=[1.0, 0.4, 1.0],
-            # Probability that each command channel stays active
+            # Probability that each command channel stays active, weighted more fo x so that it focuses on moving forward?
             b=[0.9, 0.25, 0.5],
             # Stage metadata is injected from configs/course_config.json.
             stage_name="stage_1",
@@ -217,7 +217,7 @@ class Joystick(go2_base.Go2Env):
         )
         data = mjx.forward(self.mjx_model, data)
 
-        rng, key1, key2, key3 = jax.random.split(rng, 4)
+        rng, key1, key2, key3 = jax.random.split(rng, 4) #Use the generated subkeys in JAX random functions as seen below?
         time_until_next_pert = jax.random.uniform(
             key1,
             minval=self._config.pert_config.kick_wait_times[0],
@@ -240,7 +240,7 @@ class Joystick(go2_base.Go2Env):
 
         rng, key1, key2 = jax.random.split(rng, 3)
         time_until_next_cmd = jax.random.exponential(key1) * 5.0
-        steps_until_next_cmd = jp.round(time_until_next_cmd / self.dt).astype(jp.int32)
+        steps_until_next_cmd = jp.round(time_until_next_cmd / self.dt).astype(jp.int32) #time between decisions?choose random value within min/max range and run the logic?
         command = jax.random.uniform(key2, shape=(3,), minval=self._cmd_min, maxval=self._cmd_max)
 
         info = {
