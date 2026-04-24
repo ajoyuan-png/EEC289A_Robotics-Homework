@@ -107,9 +107,9 @@ def default_config() -> config_dict.ConfigDict:
             #vx: 0.6, 0.8, 1.0
             #vy: 0.2, 0.3, 0.4
             #yaw_rate: 0.6, 0.8, 1.0
-            student_stage2_goal_min=[0.6, 0.2, 0.6],
-            student_stage2_goal_max=[0.8, 0.3, 0.8],
-            student_stage2_goal_b=[1.0, 0.4, 1.0],
+            student_stage2_goal_min=[-1.0, -0.4, -1.0],
+            student_stage2_goal_max=[1.0, 0.4, 1.0],
+            student_stage2_goal_b=[0.9, 0.25, 0.5],
         ),
         impl="jax",
         naconmax=4 * 8192,
