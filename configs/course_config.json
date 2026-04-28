@@ -108,7 +108,7 @@
     "restore_previous_stage_checkpoint": true
   },
   "demo_rollout": {
-    "segment_seconds": 2.5,
+    "segment_seconds": 5.0,
     "segments": [
       [
         0.0,
@@ -116,23 +116,23 @@
         0.0
       ],
       [
+        -0.2,
         0.0,
-        0.2,
         0.0
       ],
       [
+        -0.5,
         0.0,
-        0.5,
         0.0
       ],
       [
+        -0.3,
         0.0,
-        0.3,
         0.0
       ],
       [
+        -0.3,
         0.0,
-        0.3,
         0.0
       ],
       [
