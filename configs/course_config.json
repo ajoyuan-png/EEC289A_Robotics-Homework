@@ -58,7 +58,7 @@
       0.0
     ],
     "reward_scales": {
-      "action_rate": -0.02,
+      "action_rate": -0.005,
       "energy": -0.0015
     }
   },
