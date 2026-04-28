@@ -64,24 +64,31 @@
   },
   "stage_2": {
     "name": "stage_2",
-    "num_timesteps": 5000000,
+    "num_timesteps": 10000000,
       "command_range": {
         "min": [
-          -0.6,
-          -0.2,
-          -0.6
+          -1.0,
+          -0.4,
+          -1.0
         ],
         "max": [
-          0.6,
-          0.2,
-          0.6
+          1.0,
+          0.4,
+          1.0
         ]
       },
       "command_keep_prob": [
-        1.0,
-        0.35,
-        0.35
+        0.9,
+        0.5,
+        0.5
       ],
+    "command_keep_prob": [0.9, 0.5, 0.5], // Increase variety
+    "reward_scales": {
+      "action_rate": -0.01, // Relax this to allow learning
+      "energy": -0.001     // Relax this to allow learning
+    },
+    "restore_previous_stage_checkpoint": true
+}
     "student_stage2_goal": {
       "command_range": {
         "min": [
