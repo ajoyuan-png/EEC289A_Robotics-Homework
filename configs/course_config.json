@@ -58,47 +58,40 @@
       0.0
     ],
     "reward_scales": {
-      "action_rate": -0.005,
+      "action_rate": -0.02,
       "energy": -0.0015
     }
   },
   "stage_2": {
     "name": "stage_2",
-    "num_timesteps": 10000000,
-      "command_range": {
-        "min": [
-          -1.0,
-          -0.4,
-          -1.0
-        ],
-        "max": [
-          1.0,
-          0.4,
-          1.0
-        ]
-      },
-      "command_keep_prob": [
-        0.9,
-        0.5,
-        0.5
+    "num_timesteps": 5000000,
+    "command_range": {
+      "min": [
+        0.0,
+        0.0,
+        0.0
       ],
-    "command_keep_prob": [0.9, 0.5, 0.5], // Increase variety
-    "reward_scales": {
-      "action_rate": -0.01, // Relax this to allow learning
-      "energy": -0.001     // Relax this to allow learning
+      "max": [
+        1.0,
+        0.0,
+        0.0
+      ]
     },
-    "restore_previous_stage_checkpoint": true
-}
+    "command_keep_prob": [
+      1.0,
+      0.0,
+      0.0
+    ],
     "student_stage2_goal": {
       "command_range": {
         "min": [
           -0.6,
-          -0.6,
+          -0.2,
           -0.6
         ],
         "max": [
           0.6,
-          0.6,
+          0.2,
           0.6
         ]
       },
@@ -115,7 +108,7 @@
     "restore_previous_stage_checkpoint": true
   },
   "demo_rollout": {
-    "segment_seconds": 5.0,
+    "segment_seconds": 2.5,
     "segments": [
       [
         0.0,
@@ -123,22 +116,22 @@
         0.0
       ],
       [
-        -0.2,
+        0.2,
         0.0,
         0.0
       ],
       [
-        -0.5,
+        0.4,
         0.0,
         0.0
       ],
       [
-        -0.3,
+        0.6,
         0.0,
         0.0
       ],
       [
-        -0.3,
+        0.3,
         0.0,
         0.0
       ],
