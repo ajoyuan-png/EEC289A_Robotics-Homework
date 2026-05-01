@@ -277,7 +277,7 @@
       256,
       128
     ],
-    "stage_1_num_timesteps": 5000000,
+    "stage_1_num_timesteps": 10000000,
     "stage_2_num_timesteps": 20000000
   }
 }
