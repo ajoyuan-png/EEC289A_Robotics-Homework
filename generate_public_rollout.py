@@ -47,10 +47,12 @@ def parse_args() -> argparse.Namespace:
         help="Optional manual override for benchmark episode length.",
     )
     parser.add_argument("--render-first-episode", action="store_true", help="Render the first benchmark episode.")
+    parser.add_argument("--render-all", action="store_true", help="Render all benchmark episodes.")
     parser.add_argument("--render-width", type=int, default=960, help="Rendered video width.")
     parser.add_argument("--render-height", type=int, default=540, help="Rendered video height.")
     parser.add_argument("--render-camera", type=str, default="track", help="Camera name used for MuJoCo rendering.")
     parser.add_argument("--force-cpu", action="store_true", help="Force JAX onto CPU.")
+
     return parser.parse_args()
 
 
@@ -123,8 +125,10 @@ def main() -> None:
         commands = public_command_script(safe_ranges, episode_idx)
         state = _force_command(state, np.asarray(commands[0], dtype=np.float32), jax)
 
-        if episode_idx == 0 and args.render_first_episode:
-            first_episode_trajectory = [state]
+        # Change 1: Initialize trajectory for any episode if rendering is requested
+        episode_trajectory = []
+        if args.render_all or (episode_idx == 0 and args.render_first_episode):
+            episode_trajectory = [state]
 
         steps_in_this_episode = 0
         for step_idx in range(episode_length):
@@ -149,13 +153,27 @@ def main() -> None:
             fell.append(done)
 
             steps_in_this_episode += 1
-            if episode_idx == 0 and args.render_first_episode:
-                first_episode_trajectory.append(state)
+            if episode_trajectory:
+                episode_trajectory.append(state)
 
             if done:
                 break
 
         episode_lengths.append(steps_in_this_episode)
+
+        if episode_trajectory:
+            video_path = output_dir / f"public_eval_episode{episode_idx}.mp4"
+            print(f"Rendering Episode {episode_idx} to {video_path}...")
+            frames = env.render(
+                episode_trajectory,
+                height=int(args.render_height),
+                width=int(args.render_width),
+                camera=args.render_camera,
+            )
+            media.write_video(video_path, frames, fps=int(round(1.0 / env.dt)))
+            
+            # Clear memory immediately after writing the video
+            episode_trajectory = []
 
     rollout_npz = output_dir / "rollout_public_eval.npz"
     np.savez(
