@@ -125,7 +125,6 @@ def main() -> None:
         commands = public_command_script(safe_ranges, episode_idx)
         state = _force_command(state, np.asarray(commands[0], dtype=np.float32), jax)
 
-        # Change 1: Initialize trajectory for any episode if rendering is requested
         episode_trajectory = []
         if args.render_all or (episode_idx == 0 and args.render_first_episode):
             episode_trajectory = [state]
@@ -172,7 +171,6 @@ def main() -> None:
             )
             media.write_video(video_path, frames, fps=int(round(1.0 / env.dt)))
             
-            # Clear memory immediately after writing the video
             episode_trajectory = []
 
     rollout_npz = output_dir / "rollout_public_eval.npz"
